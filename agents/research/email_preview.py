@@ -50,9 +50,9 @@ if 'draft_subject' not in st.session_state:
 if 'draft_body' not in st.session_state:
     st.session_state.draft_body = ""
 if 'draft_cc' not in st.session_state:
-    st.session_state.draft_cc = "yash@explainx.ai"
+    st.session_state.draft_cc = "thetechfisolutions@gmail.com"
 if 'draft_reply_to' not in st.session_state:
-    st.session_state.draft_reply_to = "yash@explainx.ai"
+    st.session_state.draft_reply_to = "thetechfisolutions@gmail.com"
 if 'email_sent' not in st.session_state:
     st.session_state.email_sent = False
 
@@ -383,7 +383,7 @@ class EmailDrafter:
                 - Sign as "Jane, AI Agent for Outreach"
                 
                 IMPORTANT: Your email MUST include the following information:
-                1. Start with "I'm Jane, Outreach AI Agent @ ExplainX.ai" before getting into the main content
+                1. Start with "I'm Jane, Outreach AI Agent @ The Technology Fiction" before getting into the main content
                 2. Clearly state that "This email was drafted by an AI agent" as a demonstration of our technology
                 3. Mention that we offer AI agents for business efficiency, including:
                    - Sales automation
@@ -401,8 +401,8 @@ class EmailDrafter:
                 {{
                     "subject": "Your email subject (5-7 words with emoji)",
                     "body": "Your email body",
-                    "cc": "yash@explainx.ai",
-                    "reply_to": "yash@explainx.ai"
+                    "cc": "thetechfisolutions@gmail.com",
+                    "reply_to": "thetechfisolutions@gmail.com"
                 }}"""),
             agent=writer,
             expected_output=dedent("""JSON containing subject and body for email.""")
@@ -462,8 +462,8 @@ class EmailDrafter:
             return {
                 "subject": f"👋 AI efficiency for {self.company_name}?",
                 "body": f"I'm Jane, Outreach AI Agent @ ExplainX.ai\n\nI'm reaching out about {self.company_name} in the {self.industry} space.\n\n**This email was drafted by an AI agent.**\n\nWe build AI agents to enhance business efficiency:\n- Sales automation\n- Marketing content creation\n- Customer outreach\n- Lead qualification\n\nOur AI solutions could streamline your sales and marketing operations while complementing your existing tools.\n\nInterested in boosting efficiency? Reply for more details.\n\nJane\nAI Agent for Outreach",
-                "cc": "yash@explainx.ai",
-                "reply_to": "yash@explainx.ai"
+                "cc": "thetechfisolutions@gmail.com",
+                "reply_to": "thetechfisolutions@gmail.com"
             }
             
         except Exception as e:
@@ -471,9 +471,9 @@ class EmailDrafter:
             # Fallback email content
             return {
                 "subject": f"👋 AI efficiency for {self.company_name}?",
-                "body": f"I'm Jane, Outreach AI Agent @ ExplainX.ai\n\nI'm reaching out about {self.company_name} in the {self.industry} space.\n\n**This email was drafted by an AI agent.**\n\nWe build AI agents to enhance business efficiency:\n- Sales automation\n- Marketing content creation\n- Customer outreach\n- Lead qualification\n\nOur AI solutions could streamline your sales and marketing operations while complementing your existing tools.\n\nInterested in boosting efficiency? Reply for more details.\n\nJane\nAI Agent for Outreach",
-                "cc": "yash@explainx.ai",
-                "reply_to": "yash@explainx.ai"
+                "body": f"I'm Jane, Outreach AI Agent @ The Technology Fiction\n\nI'm reaching out about {self.company_name} in the {self.industry} space.\n\n**This email was drafted by an AI agent.**\n\nWe build AI agents to enhance business efficiency:\n- Sales automation\n- Marketing content creation\n- Customer outreach\n- Lead qualification\n\nOur AI solutions could streamline your sales and marketing operations while complementing your existing tools.\n\nInterested in boosting efficiency? Reply for more details.\n\nJane\nAI Agent for Outreach",
+                "cc": "thetechfisolutions@gmail.com",
+                "reply_to": "thetechfisolutions@gmail.com"
             }
 
 def extract_website_data(url: str) -> str:
@@ -658,8 +658,8 @@ with st.form(key="email_form"):
                 email_content = drafter.draft_email(research_data, news_data)
                 st.session_state.draft_subject = email_content.get("subject", "")
                 st.session_state.draft_body = email_content.get("body", "")
-                st.session_state.draft_cc = email_content.get("cc", "yash@explainx.ai")
-                st.session_state.draft_reply_to = email_content.get("reply_to", "yash@explainx.ai")
+                st.session_state.draft_cc = email_content.get("cc", "thetechfisolutions@gmail.com")
+                st.session_state.draft_reply_to = email_content.get("reply_to", "thetechfisolutions@gmail.com")
                 st.session_state.email_data = {
                     "to": recipient_email,
                     "industry": industry
@@ -726,8 +726,8 @@ if st.session_state.email_data and st.session_state.draft_subject and st.session
                         # Update session state
                         st.session_state.draft_subject = email_content.get("subject", "")
                         st.session_state.draft_body = email_content.get("body", "")
-                        st.session_state.draft_cc = email_content.get("cc", "yash@explainx.ai")
-                        st.session_state.draft_reply_to = email_content.get("reply_to", "yash@explainx.ai")
+                        st.session_state.draft_cc = email_content.get("cc", "thetechfisolutions@gmail.com")
+                        st.session_state.draft_reply_to = email_content.get("reply_to", "thetechfisolutions@gmail.com")
                         
                         # Rerun to update UI
                         st.rerun()
@@ -785,7 +785,7 @@ else:
 
 # Footer
 st.markdown("---")
-st.markdown("Made with ❤️ by @goyashy")
+st.markdown("Made with ❤️ by @thetechnologyfiction")
 
 # Help section
 with st.sidebar:
@@ -806,6 +806,6 @@ with st.sidebar:
         - OpenAI API key (if using GPT-4)
         
         ### Need Help?
-        Contact @goyashy for support
+        Contact @thetechfisolutions@gmail.com for support
         """) 
         
