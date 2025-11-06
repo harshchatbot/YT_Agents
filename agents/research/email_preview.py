@@ -18,7 +18,7 @@ from textwrap import dedent
 from pydantic import BaseModel, Field
 from typing import Type, ClassVar
 
-# Load environment variables
+# Load environment variables...
 load_dotenv()
 
 # Initialize SerperDev tool

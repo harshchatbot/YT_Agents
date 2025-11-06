@@ -13,7 +13,7 @@ import os
 import json
 
 
-# Initialize SerperDev tool
+# Initialize SerperDev tool...
 search_tool = SerperDevTool()
 
 def get_llm(use_gpt=False):
