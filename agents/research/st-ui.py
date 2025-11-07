@@ -193,8 +193,8 @@ with tab2:
         I noticed {company}'s impressive work in the {industry} sector...
         
         Best regards,
-        Yash Thakker
-        Founder, ExplainX.ai
+        Harsh Veer Singh Nirwan
+        Founder, thetechfilabs
         ```
         """)
     
@@ -252,7 +252,7 @@ with tab3:
 
 # Footer
 st.markdown("---")
-st.markdown("Made with ❤️ by @goyashy")
+st.markdown("Made with ❤️ by @thetechfilabs")
 
 # Add help/documentation tooltip
 with st.sidebar:
@@ -270,5 +270,5 @@ with st.sidebar:
         - OpenAI API key (if using GPT-4)
         
         ### Need Help?
-        Contact @goyashy for support
+        Contact @thetechfisolutions@gmail.com for support
         """)

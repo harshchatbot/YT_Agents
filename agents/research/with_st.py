@@ -24,7 +24,7 @@ def get_llm(use_gpt=False):
             temperature=0.7
         )
     return Ollama(
-        model="deepseek-r1:latest",
+        model="gemma3:1b",
         base_url="http://localhost:11434",
         temperature=0.7
     )
