@@ -1,5 +1,5 @@
 from textwrap import dedent
-from crewai import Agent, Task, Crew, Process
+from crewai import Agent, Task, Crew, Process , LLM
 from crewai.tools import BaseTool
 from crewai_tools import SerperDevTool
 from pydantic import BaseModel, Field
@@ -8,11 +8,13 @@ import requests
 import smtplib
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
-from langchain_community.llms import Ollama
+from langchain_ollama import ChatOllama
 from langchain_openai import ChatOpenAI
 from dotenv import load_dotenv
 import os
 import json
+import logging
+
 
 # Load environment variables...
 load_dotenv()
@@ -21,18 +23,24 @@ os.environ["SERPER_API_KEY"] = os.getenv("SERPER_API_KEY")
 # Initialize SerperDev tool
 search_tool = SerperDevTool()
 
-def get_llm(use_gpt=False):
-    """Get the specified language model"""
+"""Get the specified language model"""
+"""def get_llm(use_gpt=False):
+    
     if use_gpt:
         return ChatOpenAI(
             model_name="gpt-4o-mini",
             temperature=0.7
         )
-    return Ollama(
+    st.write("🧠 Using: Local Gemma3:1b via Ollama")
+    return ChatOllama(
         model="gemma3:1b",
         base_url="http://localhost:11434",
         temperature=0.7
     )
+"""
+
+
+llm_model_string = "gemini/gemini-2.0-flash"
 
 class EmailInput(BaseModel):
     """Input schema for Email Tool"""
@@ -75,8 +83,15 @@ class EmailSender(BaseTool):
 class DetailedSalesCrew:
     def __init__(self, target_emails: List[str], use_gpt: bool = False):
         self.target_emails = target_emails
-        self.llm = get_llm(use_gpt)
+        ## self.llm = get_llm(use_gpt)
+        # Force to always use local Ollama
+        # self.llm = get_llm(use_gpt=False)
+        # self.llm = local_llm ## with this crewai can fallback to use open ai but we want to use local gemma so
+        # global local_llm  # Make sure the global variable is accessible
+        #self.llm = local_llm
         self.email_tool = EmailSender()
+
+        #logging.info(f"DetailedSalesCrew LLM: {type(self.llm).__name__}")
         
     def create_agents(self):
         # Research Agent
@@ -86,14 +101,16 @@ class DetailedSalesCrew:
             backstory=dedent("""You are an expert researcher specializing in 
                 company analysis. You excel at finding detailed information 
                 about companies, their products, and market presence."""),
-            tools=[search_tool],
+            #tools=[search_tool],
             verbose=True,
-            llm=self.llm,
+            llm=llm_model_string,
             max_iter=100,
             allow_delegation=False,
             max_rpm=50,
             max_retry_limit=3
         )
+
+        logging.info(f"researcher LLM: {type(self.researcher.llm).__name__}")
         
         # News Agent
         self.news_analyst = Agent(
@@ -102,9 +119,9 @@ class DetailedSalesCrew:
             backstory=dedent("""You are skilled at identifying relevant news 
                 and understanding industry trends. You can connect company 
                 activities to broader market movements."""),
-            tools=[search_tool],
+            #tools=[search_tool],
             verbose=True,
-            llm=self.llm,
+            llm=llm_model_string,
             max_iter=75,
             allow_delegation=False,
             max_rpm=30,
@@ -118,9 +135,9 @@ class DetailedSalesCrew:
             backstory=dedent("""You are an expert at crafting personalized 
                 outreach emails that resonate with recipients. You excel at 
                 combining company research with industry insights. You are founder of explainx.ai and your name is Yash Thakker, which is what should be mentioned in the email."""),
-            tools=[self.email_tool],
+            #tools=[self.email_tool],
             verbose=True,
-            llm=self.llm,
+            llm=llm_model_string,
             max_iter=50,
             allow_delegation=False,
             max_rpm=20,
@@ -236,24 +253,27 @@ class DetailedSalesCrew:
         return all_results
 
 def main():
-    print("\n🔍 Welcome to Sales Outreach Crew!")
-    print("\nAvailable Models:")
-    print("1. OpenAI GPT-4 Turbo (Requires API key)")
-    print("2. Local DeepSeek Coder (Requires Ollama)")
+    #print("\n🔍 Welcome to Sales Outreach Crew!")
+    #print("\nAvailable Models:")
+    #print("1. OpenAI GPT-4 Turbo (Requires API key)")
+    #print("2. Local DeepSeek Coder (Requires Ollama)")
     
-    use_gpt = input("\nUse OpenAI GPT-4? (yes/no): ").lower() == 'yes'
+    #use_gpt = input("\nUse OpenAI GPT-4? (yes/no): ").lower() == 'yes'
     
-    if not use_gpt:
-        print("\nUsing Ollama with DeepSeek Coder")
-        print("Ensure Ollama is running: ollama run deepseek-coder:latest")
+    #if not use_gpt:
+    #    print("\nUsing Ollama with gemma3:latest")
+    #    print("Ensure Ollama is running: ollama run gemma3:latest")
+
+    # 1. Initialize use_gpt BEFORE the try block
+    use_gpt = False # Default to False, since you decided to use Ollama
     
     target_emails = [
-        "pratham@explainx.ai"
+        "thetechfisolutions@gmail.com"
     ]
     
     try:
         # Initialize and run the sales crew
-        sales_crew = DetailedSalesCrew(target_emails, use_gpt)
+        sales_crew = DetailedSalesCrew(target_emails, use_gpt=False)
         results = sales_crew.run()
         
         # Print results
