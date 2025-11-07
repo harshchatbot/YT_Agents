@@ -1,5 +1,5 @@
 from textwrap import dedent
-from crewai import Agent, Task, Crew, Process
+from crewai import Agent, Task, Crew, Process , LLM
 from crewai.tools import BaseTool
 from crewai_tools import SerperDevTool
 from pydantic import BaseModel, Field
@@ -7,25 +7,24 @@ from typing import List, Dict, Type, ClassVar
 import smtplib
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
-from langchain_community.llms import Ollama
+from langchain_ollama import ChatOllama
 from langchain_openai import ChatOpenAI
 import os
 import json
+import logging
 
 
 # Initialize SerperDev tool...
 search_tool = SerperDevTool()
 
-def get_llm(use_gpt=False):
-    """Get the specified language model"""
-    if use_gpt:
-        return ChatOpenAI(
-            model_name="gpt-4o-mini",
-            temperature=0.7
-        )
-    return Ollama(
+llm_model_string = "gemini/gemini-2.0-flash"
+
+
+def get_llm():
+
+    return ChatOllama(
         model="gemma3:1b",
-        base_url="http://localhost:11434",
+        base_url="http://127.0.0.1:11434/v1",
         temperature=0.7
     )
 
@@ -98,7 +97,12 @@ class DetailedSalesCrew:
                 raise ValueError("Each target email must be a dictionary with 'email' and 'industry' keys")
         
         self.target_emails = target_emails
-        self.llm = get_llm(use_gpt)
+        ## self.llm = get_llm(use_gpt)
+        # Force to always use local Ollama
+        # self.llm = get_llm(use_gpt=False)
+        self.llm = llm_model_string
+        logging.error(f"LLM USED: {type(self.llm).__name__}")
+        logging.error(f"LLM REPR: {self.llm!r}")
         self.email_tool = EmailSender()
         
     def create_agents(self, industry: str):
@@ -115,7 +119,10 @@ class DetailedSalesCrew:
             max_iter=100,
             allow_delegation=False
         )
-        
+
+        logging.error(f"Researcher LLM: {type(self.researcher.llm).__name__}")
+
+
         # News Agent
         self.news_analyst = Agent(
             role='News and Trends Analyst',
@@ -129,7 +136,10 @@ class DetailedSalesCrew:
             max_iter=75,
             allow_delegation=False
         )
-        
+
+        logging.error(f"News analyst LLM: {type(self.news_analyst.llm).__name__}")
+
+
         # Content Writer
         template = load_email_template(industry)
         template_context = f"Use this template if available: {template}" if template else ""
@@ -148,6 +158,8 @@ class DetailedSalesCrew:
             max_iter=50,
             allow_delegation=False
         )
+
+        logging.error(f"Writer LLM: {type(self.writer.llm).__name__}")
         
         return [self.researcher, self.news_analyst, self.writer]
     

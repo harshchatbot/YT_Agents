@@ -5,3 +5,13 @@ source myenv/bin/activate
 pip install crewai python-dotenv langchain_openai langchain_community
 
 pip install 'crewai[tools]'
+
+if you see two times or nested environments :
+(myenv) (base) harshveersinghnirwan@Harshs-MacBook-Pro YT_Agents % deactivate
+(base) harshveersinghnirwan@Harshs-MacBook-Pro YT_Agents % conda deactivate
+
+when both gone then activate the env :
+source /Users/harshveersinghnirwan/Downloads/YT_Agents/myenv/bin/activate
+ then it will show :
+
+ (myenv) harshveersinghnirwan@Harshs-MacBook-Pro YT_Agents % 

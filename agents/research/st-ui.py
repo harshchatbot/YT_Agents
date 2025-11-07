@@ -50,12 +50,7 @@ def run_sales_crew(emails: List[dict], use_gpt: bool = False) -> List[dict]:
 with st.sidebar:
     st.title("⚙️ Settings")
     
-    # Model selection
-    model_option = st.radio(
-        "Select AI Model",
-        ["OpenAI GPT-4", "Local DeepSeek Coder"],
-        help="Choose between OpenAI's GPT-4 or local DeepSeek Coder model"
-    )
+    
     
     # API Keys
     with st.expander("API Configuration"):
@@ -143,14 +138,13 @@ with tab1:
                     st.error("Please configure Gmail credentials in the settings!")
                 elif not os.getenv("SERPER_API_KEY"):
                     st.error("Please configure Serper API key in the settings!")
-                elif model_option == "OpenAI GPT-4" and not os.getenv("OPENAI_API_KEY"):
-                    st.error("Please configure OpenAI API key in the settings!")
+                
                 else:
                     with st.spinner("Running outreach campaign..."):
                         try:
                             results = run_sales_crew(
                                 st.session_state.emails,
-                                use_gpt=(model_option == "OpenAI GPT-4")
+                                
                             )
                             st.session_state.results = results
                             st.success("Campaign completed successfully!")
