@@ -1,7 +1,8 @@
-```python
-from typing import Any, Dict, List, Union
+from typing import Any, Dict, List, Union 
 
 from pydantic import BaseModel, ValidationError
+
+from datetime import datetime
 
 
 class DataValidator:
@@ -56,7 +57,7 @@ if __name__ == "__main__":
         signup_ts: Union[datetime, None] = None
         friends: List[int] = []
 
-    from datetime import datetime
+    
 
     # Example data
     data = {"id": 1, "name": "John Doe", "signup_ts": "2023-10-26T10:00:00", "friends": [2, 3]}
@@ -84,4 +85,3 @@ if __name__ == "__main__":
 
     is_bool = validator.check_type(True, bool)
     print(f"Is True a boolean? {is_bool}\n")
-```
