@@ -135,7 +135,7 @@ class DetailedSalesCrew:
             backstory=dedent("""You are an expert at crafting personalized 
                 outreach emails that resonate with recipients. You excel at 
                 combining company research with industry insights. You are founder of explainx.ai and your name is Yash Thakker, which is what should be mentioned in the email."""),
-            #tools=[self.email_tool],
+            tools=[self.email_tool],
             verbose=True,
             llm=llm_model_string,
             max_iter=50,
@@ -224,8 +224,20 @@ class DetailedSalesCrew:
                 line and body text."""),
             context=[research_task, news_task]
         )
+
+        # After the email_task, add this:
+        send_task = Task(
+            description=dedent(f"""Send the email content that was generated 
+                in the previous step to the recipient {email}. 
+
+                **Action:** You MUST use the `Email Sender` tool with the 
+                JSON output (to, subject, body) from the 'email_task' as input."""),
+            agent=self.writer,
+            expected_output="A confirmation status that the email was successfully sent.",
+            context=[email_task] # Use the generated email content as context
+        )
         
-        return [research_task, news_task, email_task]
+        return [research_task, news_task, email_task, send_task]
     
     def run(self):
         """Process each email and create personalized outreach"""
