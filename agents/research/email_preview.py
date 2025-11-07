@@ -178,7 +178,7 @@ class EmailDrafter:
             tools=[search_tool, scrape_tool],
             verbose=True,
             llm=self.llm,
-            max_iter=100,
+            max_iter=5, #100
             allow_delegation=False
         )
         

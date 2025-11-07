@@ -24,7 +24,8 @@ simple_agent = Agent(
     backstory='A very simple agent designed to test LLM connectivity.',
     verbose=True, # Set to True to see the thought process
     llm=llm_model_string, # Explicitly use the working Ollama instance
-    allow_delegation=False
+    allow_delegation=False,
+    max_iter=4 # Limits the agent to a maximum of 4 tool-use cycles per task
 )
 
 print("LLM IN USE:", type(local_llm).__name__, getattr(local_llm, "model", None))

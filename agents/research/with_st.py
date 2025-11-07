@@ -116,7 +116,7 @@ class DetailedSalesCrew:
             tools=[search_tool],
             verbose=True,
             llm=self.llm,
-            max_iter=100,
+            max_iter=5,
             allow_delegation=False
         )
 
@@ -133,7 +133,7 @@ class DetailedSalesCrew:
             tools=[search_tool],
             verbose=True,
             llm=self.llm,
-            max_iter=75,
+            max_iter=5,
             allow_delegation=False
         )
 
@@ -155,7 +155,7 @@ class DetailedSalesCrew:
             tools=[self.email_tool],
             verbose=True,
             llm=self.llm,
-            max_iter=50,
+            max_iter=5,
             allow_delegation=False
         )
 

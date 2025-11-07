@@ -14,6 +14,7 @@ from dotenv import load_dotenv
 import os
 import json
 import logging
+import time
 
 
 # Load environment variables...
@@ -104,7 +105,7 @@ class DetailedSalesCrew:
             #tools=[search_tool],
             verbose=True,
             llm=llm_model_string,
-            max_iter=100,
+            max_iter=5, #100
             allow_delegation=False,
             max_rpm=50,
             max_retry_limit=3
@@ -122,7 +123,7 @@ class DetailedSalesCrew:
             #tools=[search_tool],
             verbose=True,
             llm=llm_model_string,
-            max_iter=75,
+            max_iter=5, #75
             allow_delegation=False,
             max_rpm=30,
             max_retry_limit=2
@@ -138,7 +139,7 @@ class DetailedSalesCrew:
             tools=[self.email_tool],
             verbose=True,
             llm=llm_model_string,
-            max_iter=50,
+            max_iter=5, #50
             allow_delegation=False,
             max_rpm=20,
             max_retry_limit=2
@@ -295,12 +296,11 @@ def main():
             
     except Exception as e:
         print(f"\n❌ Error: {str(e)}")
-        if use_gpt:
-            print("\nTip: Check your OpenAI API key and SERPER_API_KEY")
-        else:
-            print("\nTip: Ensure Ollama is running with deepseek-coder:latest")
-            print("Run: ollama run deepseek-coder:latest")
-            print("Also check your SERPER_API_KEY")
+    
+        # *** This is the most important place to add a delay after a failure ***
+        # This gives the rolling RPM window time to clear previous requests
+        print("Waiting 10 seconds before continuing or retrying to avoid rate limits...")
+        time.sleep(10)
 
 if __name__ == "__main__":
     main()
