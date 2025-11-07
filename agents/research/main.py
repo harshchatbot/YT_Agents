@@ -134,7 +134,7 @@ class DetailedSalesCrew:
             goal='Create highly personalized email content',
             backstory=dedent("""You are an expert at crafting personalized 
                 outreach emails that resonate with recipients. You excel at 
-                combining company research with industry insights. You are founder of explainx.ai and your name is Yash Thakker, which is what should be mentioned in the email."""),
+                combining company research with industry insights. You are founder of The Technology Fiction and your name is Harsh Veer Nirwan and here is the website url : https://services.thetechnologyfiction.com/, which is what should be mentioned in the email."""),
             tools=[self.email_tool],
             verbose=True,
             llm=llm_model_string,
